@@ -7,7 +7,7 @@ const readline = require("readline");
 const args = process.argv.slice(2);
 const CONFIG_FILE = "krypt.json";
 const DEFAULT_BASE_URL =
-  process.env.KRYPT_API_URL || "https://krypt-zeta-eight.vercel.app/api/v1";
+  process.env.KRYPT_API_URL || "https://getkrypt.dev/api/v1";
 
 function createPrompt() {
   return readline.createInterface({
