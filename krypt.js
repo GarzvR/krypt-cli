@@ -156,6 +156,7 @@ function writeGlobalConfig(config) {
 
 async function requestJson(baseUrl, endpoint, token, method = "GET", body = null) {
   const normalizedBaseUrl = baseUrl.replace(/\/+$/, "");
+  const url = `${normalizedBaseUrl}/${endpoint}`;
   const options = {
     method,
     headers: {
@@ -173,17 +174,28 @@ async function requestJson(baseUrl, endpoint, token, method = "GET", body = null
   }
 
   try {
-    const response = await fetch(`${normalizedBaseUrl}/${endpoint}`, options);
-    const payload = await response.json();
-
-    if (!response.ok) {
-      throw new Error(payload.error || `Request failed (${response.status})`);
+    const response = await fetch(url, options);
+    const contentType = response.headers.get("content-type");
+    
+    if (contentType && contentType.includes("application/json")) {
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.error || `Request failed (${response.status})`);
+      }
+      return payload;
+    } else {
+      const text = await response.text();
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error(`Endpoint not found (404). Check if the API URL is correct: ${normalizedBaseUrl}`);
+        }
+        throw new Error(`Server returned non-JSON error (${response.status}).`);
+      }
+      throw new Error(`Unexpected non-JSON response from ${url}`);
     }
-
-    return payload;
   } catch (error) {
     if (error.name === 'TypeError' && error.message === 'fetch failed') {
-        throw new Error("Connection failed. Check your internet or API URL.");
+        throw new Error(`Connection failed. Make sure the server is running at ${normalizedBaseUrl}`);
     }
     throw error;
   }
