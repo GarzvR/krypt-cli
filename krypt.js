@@ -256,7 +256,8 @@ async function linkCommand(flags) {
     console.log(`${c.green}done${c.reset}`);
 
     if (projects.length === 0) {
-      console.log(`${c.yellow}!${c.reset} No projects found in your account.`);
+      console.log(`${c.yellow}!${c.reset} No projects found.`);
+      console.log(`Create one at: ${c.cyan}https://krypt.dev${c.reset}`);
       return;
     }
 
@@ -352,7 +353,9 @@ async function pullCommand(positional, flags) {
   const local = readLocalConfig();
 
   if (!local.projectId || !local.environmentId) {
-    throw new Error(`Directory not linked. Run ${c.cyan}'krypt link'${c.reset} first.`);
+    console.error(`${c.red}❌ No project linked${c.reset}`);
+    console.log(`Run: ${c.cyan}krypt link${c.reset}`);
+    process.exit(1);
   }
 
   process.stdout.write(`${c.gray}Pulling secrets...${c.reset} `);
@@ -363,6 +366,7 @@ async function pullCommand(positional, flags) {
   });
 
   const payload = await requestJson(apiUrl, `pull?${query.toString()}`, token);
+  const secretsCount = Object.keys(payload.secrets).length;
   
   const outputFile =
     typeof flags.output === "string" && flags.output
@@ -371,7 +375,7 @@ async function pullCommand(positional, flags) {
 
   fs.writeFileSync(path.join(process.cwd(), outputFile), formatEnvFile(payload));
 
-  console.log(`${c.green}done${c.reset}`);
+  console.log(`${c.green}✓${c.reset} Pulled ${c.bold}${secretsCount}${c.reset} variables`);
   console.log(`${c.green}✓${c.reset} Wrote ${c.bold}${outputFile}${c.reset}`);
 }
 
