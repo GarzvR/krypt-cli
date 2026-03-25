@@ -11,7 +11,7 @@ const GLOBAL_CONFIG_DIR = path.join(os.homedir(), ".krypt");
 const GLOBAL_CONFIG_FILE = path.join(GLOBAL_CONFIG_DIR, "config.json");
 
 const DEFAULT_BASE_URL =
-  process.env.KRYPT_API_URL || "https://krypt-zeta-eight.vercel.app/api/v1";
+  process.env.KRYPT_API_URL || "https://www.getkrypt.dev/api/v1";
 
 const c = {
   reset: "\x1b[0m",
