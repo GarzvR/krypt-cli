@@ -1,17 +1,24 @@
 {
   "name": "krypt-cli",
-  "version": "0.1.0",
-  "description": "Official CLI for pulling Krypt environment secrets.",
+  "version": "1.0.0",
+  "description": "Secure Environment Variable Manager CLI for Krypt",
+  "main": "krypt.js",
   "bin": {
-    "krypt": "./bin/krypt.js"
+    "krypt": "krypt.js"
   },
-  "files": [
-    "bin",
-    "README.md",
-    "LICENSE"
-  ],
   "engines": {
-    "node": ">=18"
+    "node": ">=18.0.0"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "krypt",
+    "secrets",
+    "env",
+    "security",
+    "cli"
+  ],
+  "author": "GarzvR",
   "license": "MIT"
 }
